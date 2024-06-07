@@ -1,3 +1,3 @@
 # Anthropic Courses
 
-Welcome to Anthropic's eductional courses. 
+Welcome to Anthropic's educational courses. 
