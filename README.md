@@ -10,4 +10,3 @@ Welcome to Anthropic's educational courses. This repository currently contains f
 3. [Real world prompting course](./real_world_prompting/README.md) - learn how to incorporate prompting techniques into complex, real world prompts
 4. [Tool use course](./tool_use/README.md) - teaches everything you need to know to implement tool use successfully in your workflows with Claude.
 
-[Real world prompting with Google Vertex](https://github.com/anthropics/courses/tree/vertex/real_world_prompting) - learn how to incorporate prompting techniques into complex, real world prompts with Google Vertex 
