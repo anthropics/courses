@@ -1,4 +1,4 @@
-# Anthropic API fundamentals course
+# Anthropic API fundamentals
 A series of notebook tutorials that cover the essentials of working with Claude models and the Anthropic SDK including:
 
 * [Getting an API key and making simple requests](./01_getting_started.ipynb)
