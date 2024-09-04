@@ -1,6 +1,6 @@
 # Anthropic courses
 
-Welcome to Anthropic's educational courses. This repository currently contains four courses.  We suggest completing the courses in the following order:
+Welcome to Anthropic's educational courses. This repository currently contains five courses.  We suggest completing the courses in the following order:
 
 1. [Anthropic API fundamentals](./anthropic_api_fundamentals/README.md) - teaches the essentials of working with the Claude SDK: getting an API key, working with model parameters, writing multimodal prompts, streaming responses, etc.
 2. [Prompt engineering interactive tutorial](./prompt_engineering_interactive_tutorial/README.md) - a comprehensive step-by-step guide to key prompting techniques
