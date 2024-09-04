@@ -1,0 +1,21 @@
+complaint,__expected
+The app crashes every time I try to upload a photo,contains-all:Software Bug
+My printer isn't recognized by my computer,contains-all:Hardware Malfunction
+I can't figure out how to change my password,contains-all:User Error
+The website is completely down I can't access any pages,contains-all:Service Outage
+It would be great if the app had a dark mode option,contains-all:Feature Request
+The software keeps freezing when I try to save large files,contains-all:Software Bug
+My wireless mouse isn't working even with new batteries,contains-all:Hardware Malfunction
+I accidentally deleted some important files can you help me recover them?,contains-all:User Error
+None of your servers are responding is there an outage?,contains-all:Service Outage
+Could you add a feature to export data in CSV format?,contains-all:Feature Request
+"The app is crashing and my phone is overheating","contains-all:Software Bug,Hardware Malfunction"
+I can't remember my password!,contains-all:User Error
+The new update broke something and the app no longer works for me,contains-all:Software Bug
+"I think I installed something incorrectly now my computer won't start at all","contains-all:User Error,Hardware Malfunction"
+"Your service is down and I urgently need a feature to batch process files","contains-all:Service Outage,Feature Request"
+The graphics card is making weird noises,contains-all:Hardware Malfunction
+My keyboard just totally stopped working out of nowhere,contains-all:Hardware Malfunction
+Whenever I open your app my phone gets really slow,contains-all:Software Bug
+Can you make the interface more user-friendly? I always get lost in the menus,"contains-all:Feature Request,User Error"
+The cloud storage isn't syncing and I can't access my files from other devices,"contains-all:Software Bug,Service Outage"

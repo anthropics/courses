@@ -1,0 +1,549 @@
+A convolutional neural network (CNN) is a regularized type of feed-forward neural network that learns features by itself via filter (or kernel) optimization. Vanishing gradients and exploding gradients, seen during backpropagation in earlier neural networks, are prevented by using regularized weights over fewer connections.[1][2] For example, for each neuron in the fully-connected layer, 10,000 weights would be required for processing an image sized 100 × 100 pixels. However, applying cascaded convolution (or cross-correlation) kernels,[3][4] only 25 neurons are required to process 5x5-sized tiles.[5][6] Higher-layer features are extracted from wider context windows, compared to lower-layer features.
+
+They have applications in:
+
+image and video recognition,[7]
+recommender systems,[8]
+image classification,
+image segmentation,
+medical image analysis,
+natural language processing,[9]
+brain–computer interfaces,[10] and
+financial time series.[11]
+CNNs are also known as shift invariant or space invariant artificial neural networks (SIANN), based on the shared-weight architecture of the convolution kernels or filters that slide along input features and provide translation-equivariant responses known as feature maps.[12][13] Counter-intuitively, most convolutional neural networks are not invariant to translation, due to the downsampling operation they apply to the input.[14]
+
+Feed-forward neural networks are usually fully connected networks, that is, each neuron in one layer is connected to all neurons in the next layer. The "full connectivity" of these networks makes them prone to overfitting data. Typical ways of regularization, or preventing overfitting, include: penalizing parameters during training (such as weight decay) or trimming connectivity (skipped connections, dropout, etc.) Robust datasets also increase the probability that CNNs will learn the generalized principles that characterize a given dataset rather than the biases of a poorly-populated set.[15]
+
+Convolutional networks were inspired by biological processes[16][17][18][19] in that the connectivity pattern between neurons resembles the organization of the animal visual cortex. Individual cortical neurons respond to stimuli only in a restricted region of the visual field known as the receptive field. The receptive fields of different neurons partially overlap such that they cover the entire visual field.
+
+CNNs use relatively little pre-processing compared to other image classification algorithms. This means that the network learns to optimize the filters (or kernels) through automated learning, whereas in traditional algorithms these filters are hand-engineered. This independence from prior knowledge and human intervention in feature extraction is a major advantage.[to whom?]
+
+Architecture
+
+Comparison of the LeNet and AlexNet convolution, pooling and dense layers
+(AlexNet image size should be 227×227×3, instead of 224×224×3, so the math will come out right. The original paper said different numbers, but Andrej Karpathy, the head of computer vision at Tesla, said it should be 227×227×3 (he said Alex did not describe why he put 224×224×3). The next convolution should be 11×11 with stride 4: 55×55×96 (instead of 54×54×96). It would be calculated, for example, as: [(input width 227 - kernel width 11) / stride 4] + 1 = [(227 - 11) / 4] + 1 = 55. Since the kernel output is the same length as width, its area is 55×55.)
+Main article: Layer (deep learning)
+A convolutional neural network consists of an input layer, hidden layers and an output layer. In a convolutional neural network, the hidden layers include one or more layers that perform convolutions. Typically this includes a layer that performs a dot product of the convolution kernel with the layer's input matrix. This product is usually the Frobenius inner product, and its activation function is commonly ReLU. As the convolution kernel slides along the input matrix for the layer, the convolution operation generates a feature map, which in turn contributes to the input of the next layer. This is followed by other layers such as pooling layers, fully connected layers, and normalization layers. Here it should be noted how close a convolutional neural network is to a matched filter.[20]
+
+Convolutional layers
+In a CNN, the input is a tensor with shape:
+
+(number of inputs) × (input height) × (input width) × (input channels)
+
+After passing through a convolutional layer, the image becomes abstracted to a feature map, also called an activation map, with shape:
+
+(number of inputs) × (feature map height) × (feature map width) × (feature map channels).
+
+Convolutional layers convolve the input and pass its result to the next layer. This is similar to the response of a neuron in the visual cortex to a specific stimulus.[21] Each convolutional neuron processes data only for its receptive field.
+
+
+1D convolutional neural network feed forward example
+Although fully connected feedforward neural networks can be used to learn features and classify data, this architecture is generally impractical for larger inputs (e.g., high-resolution images), which would require massive numbers of neurons because each pixel is a relevant input feature. A fully connected layer for an image of size 100 × 100 has 10,000 weights for each neuron in the second layer. Convolution reduces the number of free parameters, allowing the network to be deeper.[5] For example, using a 5 × 5 tiling region, each with the same shared weights, requires only 25 neurons. Using regularized weights over fewer parameters avoids the vanishing gradients and exploding gradients problems seen during backpropagation in earlier neural networks.[1][2]
+
+To speed processing, standard convolutional layers can be replaced by depthwise separable convolutional layers,[22] which are based on a depthwise convolution followed by a pointwise convolution. The depthwise convolution is a spatial convolution applied independently over each channel of the input tensor, while the pointwise convolution is a standard convolution restricted to the use of 
+1
+×
+1
+{\displaystyle 1\times 1} kernels.
+
+Pooling layers
+Convolutional networks may include local and/or global pooling layers along with traditional convolutional layers. Pooling layers reduce the dimensions of data by combining the outputs of neuron clusters at one layer into a single neuron in the next layer. Local pooling combines small clusters, tiling sizes such as 2 × 2 are commonly used. Global pooling acts on all the neurons of the feature map.[23][24] There are two common types of pooling in popular use: max and average. Max pooling uses the maximum value of each local cluster of neurons in the feature map,[25][26] while average pooling takes the average value.
+
+Fully connected layers
+Fully connected layers connect every neuron in one layer to every neuron in another layer. It is the same as a traditional multilayer perceptron neural network (MLP). The flattened matrix goes through a fully connected layer to classify the images.
+
+Receptive field
+In neural networks, each neuron receives input from some number of locations in the previous layer. In a convolutional layer, each neuron receives input from only a restricted area of the previous layer called the neuron's receptive field. Typically the area is a square (e.g. 5 by 5 neurons). Whereas, in a fully connected layer, the receptive field is the entire previous layer. Thus, in each convolutional layer, each neuron takes input from a larger area in the input than previous layers. This is due to applying the convolution over and over, which takes the value of a pixel into account, as well as its surrounding pixels. When using dilated layers, the number of pixels in the receptive field remains constant, but the field is more sparsely populated as its dimensions grow when combining the effect of several layers.
+
+To manipulate the receptive field size as desired, there are some alternatives to the standard convolutional layer. For example, atrous or dilated convolution[27][28] expands the receptive field size without increasing the number of parameters by interleaving visible and blind regions. Moreover, a single dilated convolutional layer can comprise filters with multiple dilation ratios,[29] thus having a variable receptive field size.
+
+Weights
+Each neuron in a neural network computes an output value by applying a specific function to the input values received from the receptive field in the previous layer. The function that is applied to the input values is determined by a vector of weights and a bias (typically real numbers). Learning consists of iteratively adjusting these biases and weights.
+
+The vectors of weights and biases are called filters and represent particular features of the input (e.g., a particular shape). A distinguishing feature of CNNs is that many neurons can share the same filter. This reduces the memory footprint because a single bias and a single vector of weights are used across all receptive fields that share that filter, as opposed to each receptive field having its own bias and vector weighting.[30]
+
+History
+CNN are often compared to the way the brain achieves vision processing in living organisms.[31]
+
+Receptive fields in the visual cortex
+Work by Hubel and Wiesel in the 1950s and 1960s showed that cat visual cortices contain neurons that individually respond to small regions of the visual field. Provided the eyes are not moving, the region of visual space within which visual stimuli affect the firing of a single neuron is known as its receptive field.[32] Neighboring cells have similar and overlapping receptive fields. Receptive field size and location varies systematically across the cortex to form a complete map of visual space.[citation needed] The cortex in each hemisphere represents the contralateral visual field.[citation needed]
+
+Their 1968 paper identified two basic visual cell types in the brain:[17]
+
+simple cells, whose output is maximized by straight edges having particular orientations within their receptive field
+complex cells, which have larger receptive fields, whose output is insensitive to the exact position of the edges in the field.
+Hubel and Wiesel also proposed a cascading model of these two types of cells for use in pattern recognition tasks.[33][32]
+
+Neocognitron, origin of the CNN architecture
+The "neocognitron"[16] was introduced by Kunihiko Fukushima in 1980.[18][26][34] It was inspired by the above-mentioned work of Hubel and Wiesel. The neocognitron introduced the two basic types of layers:
+
+"S-layer": a shared-weights receptive-field layer, later known as a convolutional layer, which contains units whose receptive fields cover a patch of the previous layer. A shared-weights receptive-field group (a "plane" in neocognitron terminology) is often called a filter, and a layer typically has several such filters.
+"C-layer": a downsampling layer that contain units whose receptive fields cover patches of previous convolutional layers. Such a unit typically computes a weighted average of the activations of the units in its patch, and applies inhibition (divisive normalization) pooled from a somewhat larger patch and across different filters in a layer, and applies a saturating activation function. The patch weights are nonnegative and are not trainable in the original neocognitron. The downsampling and competitive inhibition help to classify features and objects in visual scenes even when the objects are shifted.
+In 1969, Fukushima had introduced the ReLU (rectified linear unit) activation function.[35][36] It was not used in his neocognitron since all the weights were nonnegative; lateral inhibition was used instead. The rectifier has become the most popular activation function for CNNs and deep neural networks in general.[37]
+
+In a variant of the neocognitron called the cresceptron, instead of using Fukushima's spatial averaging with inhibition and saturation, J. Weng et al. in 1993 introduced a method called max-pooling where a downsampling unit computes the maximum of the activations of the units in its patch.[38] Max-pooling is often used in modern CNNs.[39]
+
+Several supervised and unsupervised learning algorithms have been proposed over the decades to train the weights of a neocognitron.[16] Today, however, the CNN architecture is usually trained through backpropagation.
+
+The neocognitron is the first ANN which requires units located at multiple network positions to have shared weights, a hallmark of CNNs.
+
+Convolution in time
+The term "convolution" first appears in neural networks in a paper by Toshiteru Homma, Les Atlas, and Robert Marks II at the first Conference on Neural Information Processing Systems in 1987. Their paper replaced multiplication with convolution in time, inherently providing shift invariance, motivated by and connecting more directly to the signal-processing concept of a filter, and demonstrated it on a speech recognition task.[6] They also pointed out that as a data-trainable system, convolution is essentially equivalent to correlation since reversal of the weights does not affect the final learned function ("For convenience, we denote * as correlation instead of convolution. Note that convolving a(t) with b(t) is equivalent to correlating a(-t) with b(t).").[6] Modern CNN implementations typically do correlation and call it convolution, for convenience, as they did here.
+
+Time delay neural networks
+The time delay neural network (TDNN) was introduced in 1987 by Alex Waibel et al. for phoneme recognition and was one of the first convolutional networks, as it achieved shift-invariance.[40] A TDNN is a 1-D convolutional neural net where the convolution is performed along the time axis of the data. It is the first CNN utilizing weight sharing in combination with a training by gradient descent, using backpropagation.[41] Thus, while also using a pyramidal structure as in the neocognitron, it performed a global optimization of the weights instead of a local one.[40]
+
+TDNNs are convolutional networks that share weights along the temporal dimension.[42] They allow speech signals to be processed time-invariantly. In 1990 Hampshire and Waibel introduced a variant that performs a two-dimensional convolution.[43] Since these TDNNs operated on spectrograms, the resulting phoneme recognition system was invariant to both time and frequency shifts, as with images processed by a neocognitron.
+
+TDNNs improved the performance of far-distance speech recognition.[44]
+
+Image recognition with CNNs trained by gradient descent
+Denker et al. (1989) designed a 2-D CNN system to recognize hand-written ZIP Code numbers.[45] However, the lack of an efficient training method to determine the kernel coefficients of the involved convolutions meant that all the coefficients had to be laboriously hand-designed.[46]
+
+Following the advances in the training of 1-D CNNs by Waibel et al. (1987), Yann LeCun et al. (1989)[46] used back-propagation to learn the convolution kernel coefficients directly from images of hand-written numbers. Learning was thus fully automatic, performed better than manual coefficient design, and was suited to a broader range of image recognition problems and image types. Wei Zhang et al. (1988)[12][13] used back-propagation to train the convolution kernels of a CNN for alphabets recognition. The model was called shift-invariant pattern recognition neural network before the name CNN was coined later in the early 1990s. Wei Zhang et al. also applied the same CNN without the last fully connected layer for medical image object segmentation (1991)[47] and breast cancer detection in mammograms (1994).[48]
+
+This approach became a foundation of modern computer vision.
+
+Max pooling
+In 1990 Yamaguchi et al. introduced the concept of max pooling, a fixed filtering operation that calculates and propagates the maximum value of a given region. They did so by combining TDNNs with max pooling to realize a speaker-independent isolated word recognition system.[25] In their system they used several TDNNs per word, one for each syllable. The results of each TDNN over the input signal were combined using max pooling and the outputs of the pooling layers were then passed on to networks performing the actual word classification.
+
+LeNet-5
+Main article: LeNet
+LeNet-5, a pioneering 7-level convolutional network by LeCun et al. in 1995,[49] classifies hand-written numbers on checks (British English: cheques) digitized in 32x32 pixel images. The ability to process higher-resolution images requires larger and more layers of convolutional neural networks, so this technique is constrained by the availability of computing resources.
+
+It was superior than other commercial courtesy amount reading systems (as of 1995). The system was integrated in NCR's check reading systems, and fielded in several American banks since June 1996, reading millions of checks per day.[50]
+
+Shift-invariant neural network
+A shift-invariant neural network was proposed by Wei Zhang et al. for image character recognition in 1988.[12][13] It is a modified Neocognitron by keeping only the convolutional interconnections between the image feature layers and the last fully connected layer. The model was trained with back-propagation. The training algorithm was further improved in 1991[51] to improve its generalization ability. The model architecture was modified by removing the last fully connected layer and applied for medical image segmentation (1991)[47] and automatic detection of breast cancer in mammograms (1994).[48]
+
+A different convolution-based design was proposed in 1988[52] for application to decomposition of one-dimensional electromyography convolved signals via de-convolution. This design was modified in 1989 to other de-convolution-based designs.[53][54]
+
+Neural abstraction pyramid
+Neural Abstraction Pyramid
+Neural abstraction pyramid
+The feed-forward architecture of convolutional neural networks was extended in the neural abstraction pyramid[55] by lateral and feedback connections. The resulting recurrent convolutional network allows for the flexible incorporation of contextual information to iteratively resolve local ambiguities. In contrast to previous models, image-like outputs at the highest resolution were generated, e.g., for semantic segmentation, image reconstruction, and object localization tasks.
+
+GPU implementations
+Although CNNs were invented in the 1980s, their breakthrough in the 2000s required fast implementations on graphics processing units (GPUs).
+
+In 2004, it was shown by K. S. Oh and K. Jung that standard neural networks can be greatly accelerated on GPUs. Their implementation was 20 times faster than an equivalent implementation on CPU.[56] In 2005, another paper also emphasised the value of GPGPU for machine learning.[57]
+
+The first GPU-implementation of a CNN was described in 2006 by K. Chellapilla et al. Their implementation was 4 times faster than an equivalent implementation on CPU.[58] In the same period, GPUs were also used for unsupervised training of deep belief networks.[59][60][61][62]
+
+In 2010, Dan Ciresan et al. at IDSIA trained deep feedforward networks on GPUs.[63] In 2011, they extended this to CNNs, accelerating by 60 compared to training CPU.[23] In 2011, the network win an image recognition contest where they achieved superhuman performance for the first time.[64] Then they won more competitions and achieved state of the art on several benchmarks.[65][39][26]
+
+Subsequently, AlexNet, a similar GPU-based CNN by Alex Krizhevsky et al. won the ImageNet Large Scale Visual Recognition Challenge 2012.[66] It was an early catalytic event for the AI boom.
+
+A very deep CNN with over 100 layers by Microsoft won the ImageNet 2015 contest.[67]
+
+Intel Xeon Phi implementations
+Compared to the training of CNNs using GPUs, not much attention was given to the Intel Xeon Phi coprocessor.[68] A notable development is a parallelization method for training convolutional neural networks on the Intel Xeon Phi, named Controlled Hogwild with Arbitrary Order of Synchronization (CHAOS).[69] CHAOS exploits both the thread- and SIMD-level parallelism that is available on the Intel Xeon Phi.
+
+Distinguishing features
+In the past, traditional multilayer perceptron (MLP) models were used for image recognition.[example needed] However, the full connectivity between nodes caused the curse of dimensionality, and was computationally intractable with higher-resolution images. A 1000×1000-pixel image with RGB color channels has 3 million weights per fully-connected neuron, which is too high to feasibly process efficiently at scale.
+
+
+CNN layers arranged in 3 dimensions
+For example, in CIFAR-10, images are only of size 32×32×3 (32 wide, 32 high, 3 color channels), so a single fully connected neuron in the first hidden layer of a regular neural network would have 32*32*3 = 3,072 weights. A 200×200 image, however, would lead to neurons that have 200*200*3 = 120,000 weights.
+
+Also, such network architecture does not take into account the spatial structure of data, treating input pixels which are far apart in the same way as pixels that are close together. This ignores locality of reference in data with a grid-topology (such as images), both computationally and semantically. Thus, full connectivity of neurons is wasteful for purposes such as image recognition that are dominated by spatially local input patterns.
+
+Convolutional neural networks are variants of multilayer perceptrons, designed to emulate the behavior of a visual cortex. These models mitigate the challenges posed by the MLP architecture by exploiting the strong spatially local correlation present in natural images. As opposed to MLPs, CNNs have the following distinguishing features:
+
+3D volumes of neurons. The layers of a CNN have neurons arranged in 3 dimensions: width, height and depth.[70] Where each neuron inside a convolutional layer is connected to only a small region of the layer before it, called a receptive field. Distinct types of layers, both locally and completely connected, are stacked to form a CNN architecture.
+Local connectivity: following the concept of receptive fields, CNNs exploit spatial locality by enforcing a local connectivity pattern between neurons of adjacent layers. The architecture thus ensures that the learned "filters" produce the strongest response to a spatially local input pattern. Stacking many such layers leads to nonlinear filters that become increasingly global (i.e. responsive to a larger region of pixel space) so that the network first creates representations of small parts of the input, then from them assembles representations of larger areas.
+Shared weights: In CNNs, each filter is replicated across the entire visual field. These replicated units share the same parameterization (weight vector and bias) and form a feature map. This means that all the neurons in a given convolutional layer respond to the same feature within their specific response field. Replicating units in this way allows for the resulting activation map to be equivariant under shifts of the locations of input features in the visual field, i.e. they grant translational equivariance—given that the layer has a stride of one.[71]
+Pooling: In a CNN's pooling layers, feature maps are divided into rectangular sub-regions, and the features in each rectangle are independently down-sampled to a single value, commonly by taking their average or maximum value. In addition to reducing the sizes of feature maps, the pooling operation grants a degree of local translational invariance to the features contained therein, allowing the CNN to be more robust to variations in their positions.[14]
+Together, these properties allow CNNs to achieve better generalization on vision problems. Weight sharing dramatically reduces the number of free parameters learned, thus lowering the memory requirements for running the network and allowing the training of larger, more powerful networks.
+
+Building blocks
+
+This section needs additional citations for verification. Please help improve this article by adding citations to reliable sources in this section. Unsourced material may be challenged and removed. (June 2017) (Learn how and when to remove this message)
+A CNN architecture is formed by a stack of distinct layers that transform the input volume into an output volume (e.g. holding the class scores) through a differentiable function. A few distinct types of layers are commonly used. These are further discussed below.
+
+
+Neurons of a convolutional layer (blue), connected to their receptive field (red)
+Convolutional layer
+
+A worked example of performing a convolution. The convolution has stride 1, zero-padding, with kernel size 3-by-3. The convolution kernel is a discrete Laplacian operator.
+The convolutional layer is the core building block of a CNN. The layer's parameters consist of a set of learnable filters (or kernels), which have a small receptive field, but extend through the full depth of the input volume. During the forward pass, each filter is convolved across the width and height of the input volume, computing the dot product between the filter entries and the input, producing a 2-dimensional activation map of that filter. As a result, the network learns filters that activate when it detects some specific type of feature at some spatial position in the input.[72][nb 1]
+
+Stacking the activation maps for all filters along the depth dimension forms the full output volume of the convolution layer. Every entry in the output volume can thus also be interpreted as an output of a neuron that looks at a small region in the input. Each entry in an activation map use the same set of parameters that define the filter.
+
+Self-supervised learning has been adapted for use in convolutional layers by using sparse patches with a high-mask ratio and a global response normalization layer.[citation needed]
+
+Local connectivity
+
+Typical CNN architecture
+When dealing with high-dimensional inputs such as images, it is impractical to connect neurons to all neurons in the previous volume because such a network architecture does not take the spatial structure of the data into account. Convolutional networks exploit spatially local correlation by enforcing a sparse local connectivity pattern between neurons of adjacent layers: each neuron is connected to only a small region of the input volume.
+
+The extent of this connectivity is a hyperparameter called the receptive field of the neuron. The connections are local in space (along width and height), but always extend along the entire depth of the input volume. Such an architecture ensures that the learned (British English: learnt) filters produce the strongest response to a spatially local input pattern.
+
+Spatial arrangement
+Three hyperparameters control the size of the output volume of the convolutional layer: the depth, stride, and padding size:
+
+The depth of the output volume controls the number of neurons in a layer that connect to the same region of the input volume. These neurons learn to activate for different features in the input. For example, if the first convolutional layer takes the raw image as input, then different neurons along the depth dimension may activate in the presence of various oriented edges, or blobs of color.
+Stride controls how depth columns around the width and height are allocated. If the stride is 1, then we move the filters one pixel at a time. This leads to heavily overlapping receptive fields between the columns, and to large output volumes. For any integer 
+S
+>
+0
+,
+{\textstyle S>0,} a stride S means that the filter is translated S units at a time per output. In practice, 
+S
+≥
+3
+{\textstyle S\geq 3} is rare. A greater stride means smaller overlap of receptive fields and smaller spatial dimensions of the output volume.[73]
+Sometimes, it is convenient to pad the input with zeros (or other values, such as the average of the region) on the border of the input volume. The size of this padding is a third hyperparameter. Padding provides control of the output volume's spatial size. In particular, sometimes it is desirable to exactly preserve the spatial size of the input volume, this is commonly referred to as "same" padding.
+
+Three example padding conditions. Replication condition means that the pixel outside is padded with the closest pixel inside. The reflection padding is where the pixel outside is padded with the pixel inside, reflected across the boundary of the image. The circular padding is where the pixel outside wraps around to the other side of the image.
+The spatial size of the output volume is a function of the input volume size 
+W
+{\displaystyle W}, the kernel field size 
+K
+{\displaystyle K} of the convolutional layer neurons, the stride 
+S
+{\displaystyle S}, and the amount of zero padding 
+P
+{\displaystyle P} on the border. The number of neurons that "fit" in a given volume is then:
+
+W
+−
+K
++
+2
+P
+S
++
+1.
+{\displaystyle {\frac {W-K+2P}{S}}+1.}
+If this number is not an integer, then the strides are incorrect and the neurons cannot be tiled to fit across the input volume in a symmetric way. In general, setting zero padding to be 
+P
+=
+(
+K
+−
+1
+)
+/
+2
+{\textstyle P=(K-1)/2} when the stride is 
+S
+=
+1
+{\displaystyle S=1} ensures that the input volume and output volume will have the same size spatially. However, it is not always completely necessary to use all of the neurons of the previous layer. For example, a neural network designer may decide to use just a portion of padding.
+
+Parameter sharing
+A parameter sharing scheme is used in convolutional layers to control the number of free parameters. It relies on the assumption that if a patch feature is useful to compute at some spatial position, then it should also be useful to compute at other positions. Denoting a single 2-dimensional slice of depth as a depth slice, the neurons in each depth slice are constrained to use the same weights and bias.
+
+Since all neurons in a single depth slice share the same parameters, the forward pass in each depth slice of the convolutional layer can be computed as a convolution of the neuron's weights with the input volume.[nb 2] Therefore, it is common to refer to the sets of weights as a filter (or a kernel), which is convolved with the input. The result of this convolution is an activation map, and the set of activation maps for each different filter are stacked together along the depth dimension to produce the output volume. Parameter sharing contributes to the translation invariance of the CNN architecture.[14]
+
+Sometimes, the parameter sharing assumption may not make sense. This is especially the case when the input images to a CNN have some specific centered structure; for which we expect completely different features to be learned on different spatial locations. One practical example is when the inputs are faces that have been centered in the image: we might expect different eye-specific or hair-specific features to be learned in different parts of the image. In that case it is common to relax the parameter sharing scheme, and instead simply call the layer a "locally connected layer".
+
+Pooling layer
+
+Worked example of 2x2 maxpooling with stride 2.
+
+Max pooling with a 2x2 filter and stride = 2
+Another important concept of CNNs is pooling, which is a form of non-linear down-sampling. There are several non-linear functions to implement pooling, where max pooling is the most common. It partitions the input image into a set of rectangles and, for each such sub-region, outputs the maximum.
+
+Intuitively, the exact location of a feature is less important than its rough location relative to other features. This is the idea behind the use of pooling in convolutional neural networks. The pooling layer serves to progressively reduce the spatial size of the representation, to reduce the number of parameters, memory footprint and amount of computation in the network, and hence to also control overfitting. This is known as down-sampling. It is common to periodically insert a pooling layer between successive convolutional layers (each one typically followed by an activation function, such as a ReLU layer) in a CNN architecture.[72]: 460–461  While pooling layers contribute to local translation invariance, they do not provide global translation invariance in a CNN, unless a form of global pooling is used.[14][71] The pooling layer commonly operates independently on every depth, or slice, of the input and resizes it spatially. A very common form of max pooling is a layer with filters of size 2×2, applied with a stride of 2, which subsamples every depth slice in the input by 2 along both width and height, discarding 75% of the activations:
+f
+X
+,
+Y
+(
+S
+)
+=
+max
+a
+,
+b
+=
+0
+1
+S
+2
+X
++
+a
+,
+2
+Y
++
+b
+.
+{\displaystyle f_{X,Y}(S)=\max _{a,b=0}^{1}S_{2X+a,2Y+b}.}In this case, every max operation is over 4 numbers. The depth dimension remains unchanged (this is true for other forms of pooling as well).
+
+In addition to max pooling, pooling units can use other functions, such as average pooling or ℓ2-norm pooling. Average pooling was often used historically but has recently fallen out of favor compared to max pooling, which generally performs better in practice.[74]
+
+Due to the effects of fast spatial reduction of the size of the representation,[which?] there is a recent trend towards using smaller filters[75] or discarding pooling layers altogether.[76]
+
+
+RoI pooling to size 2x2. In this example region proposal (an input parameter) has size 7x5.
+"Region of Interest" pooling (also known as RoI pooling) is a variant of max pooling, in which output size is fixed and input rectangle is a parameter.[citation needed]
+
+Pooling is a downsampling method and an important component of convolutional neural networks for object detection based on the Fast R-CNN[77] architecture.
+
+Channel max pooling
+A channel max pooling (CMP) operation layer conducts the MP operation along the channel side among the corresponding positions of the consecutive feature maps for the purpose of redundant information elimination. The CMP makes the significant features gather together within fewer channels, which is important for fine-grained image classification that needs more discriminating features. Meanwhile, another advantage of the CMP operation is to make the channel number of feature maps smaller before it connects to the first fully connected (FC) layer. Similar to the MP operation, we denote the input feature maps and output feature maps of a CMP layer as F ∈ R(C×M×N) and C ∈ R(c×M×N), respectively, where C and c are the channel numbers of the input and output feature maps, M and N are the widths and the height of the feature maps, respectively. Note that the CMP operation only changes the channel number of the feature maps. The width and the height of the feature maps are not changed, which is different from the MP operation.[78]
+
+ReLU layer
+ReLU is the abbreviation of rectified linear unit introduced by Kunihiko Fukushima in 1969.[35][36] ReLU applies the non-saturating activation function 
+f
+(
+x
+)
+=
+max
+(
+0
+,
+x
+)
+{\textstyle f(x)=\max(0,x)}.[66] It effectively removes negative values from an activation map by setting them to zero.[79] It introduces nonlinearity to the decision function and in the overall network without affecting the receptive fields of the convolution layers. In 2011, Xavier Glorot, Antoine Bordes and Yoshua Bengio found that ReLU enables better training of deeper networks,[80] compared to widely used activation functions prior to 2011.
+
+Other functions can also be used to increase nonlinearity, for example the saturating hyperbolic tangent 
+f
+(
+x
+)
+=
+tanh
+⁡
+(
+x
+)
+{\displaystyle f(x)=\tanh(x)}, 
+f
+(
+x
+)
+=
+|
+tanh
+⁡
+(
+x
+)
+|
+{\displaystyle f(x)=|\tanh(x)|}, and the sigmoid function 
+σ
+(
+x
+)
+=
+(
+1
++
+e
+−
+x
+)
+−
+1
+{\textstyle \sigma (x)=(1+e^{-x})^{-1}}. ReLU is often preferred to other functions because it trains the neural network several times faster without a significant penalty to generalization accuracy.[81]
+
+Fully connected layer
+After several convolutional and max pooling layers, the final classification is done via fully connected layers. Neurons in a fully connected layer have connections to all activations in the previous layer, as seen in regular (non-convolutional) artificial neural networks. Their activations can thus be computed as an affine transformation, with matrix multiplication followed by a bias offset (vector addition of a learned or fixed bias term).
+
+Loss layer
+Main articles: Loss function and Loss functions for classification
+The "loss layer", or "loss function", specifies how training penalizes the deviation between the predicted output of the network, and the true data labels (during supervised learning). Various loss functions can be used, depending on the specific task.
+
+The Softmax loss function is used for predicting a single class of K mutually exclusive classes.[nb 3] Sigmoid cross-entropy loss is used for predicting K independent probability values in 
+[
+0
+,
+1
+]
+{\displaystyle [0,1]}. Euclidean loss is used for regressing to real-valued labels 
+(
+−
+∞
+,
+∞
+)
+{\displaystyle (-\infty ,\infty )}.
+
+Hyperparameters
+
+This section needs additional citations for verification. Please help improve this article by adding citations to reliable sources in this section. Unsourced material may be challenged and removed. (June 2017) (Learn how and when to remove this message)
+Hyperparameters are various settings that are used to control the learning process. CNNs use more hyperparameters than a standard multilayer perceptron (MLP).
+
+Kernel size
+The kernel is the number of pixels processed together. It is typically expressed as the kernel's dimensions, e.g., 2x2, or 3x3.
+
+Padding
+Padding is the addition of (typically) 0-valued pixels on the borders of an image. This is done so that the border pixels are not undervalued (lost) from the output because they would ordinarily participate in only a single receptive field instance. The padding applied is typically one less than the corresponding kernel dimension. For example, a convolutional layer using 3x3 kernels would receive a 2-pixel pad, that is 1 pixel on each side of the image.[citation needed]
+
+Stride
+The stride is the number of pixels that the analysis window moves on each iteration. A stride of 2 means that each kernel is offset by 2 pixels from its predecessor.
+
+Number of filters
+Since feature map size decreases with depth, layers near the input layer tend to have fewer filters while higher layers can have more. To equalize computation at each layer, the product of feature values va with pixel position is kept roughly constant across layers. Preserving more information about the input would require keeping the total number of activations (number of feature maps times number of pixel positions) non-decreasing from one layer to the next.
+
+The number of feature maps directly controls the capacity and depends on the number of available examples and task complexity.
+
+Filter size
+Common filter sizes found in the literature vary greatly, and are usually chosen based on the data set. Typical filter sizes range from 1x1 to 7x7. As two famous examples, AlexNet used 3x3, 5x5, and 11x11. Inceptionv3 used 1x1, 3x3, and 5x5.
+
+The challenge is to find the right level of granularity so as to create abstractions at the proper scale, given a particular data set, and without overfitting.
+
+Pooling type and size
+Max pooling is typically used, often with a 2x2 dimension. This implies that the input is drastically downsampled, reducing processing cost.
+
+Greater pooling reduces the dimension of the signal, and may result in unacceptable information loss. Often, non-overlapping pooling windows perform best.[74]
+
+Dilation
+Dilation involves ignoring pixels within a kernel. This reduces processing/memory potentially without significant signal loss. A dilation of 2 on a 3x3 kernel expands the kernel to 5x5, while still processing 9 (evenly spaced) pixels. Accordingly, dilation of 4 expands the kernel to 7x7.[citation needed]
+
+Translation equivariance and aliasing
+It is commonly assumed that CNNs are invariant to shifts of the input. Convolution or pooling layers within a CNN that do not have a stride greater than one are indeed equivariant to translations of the input.[71] However, layers with a stride greater than one ignore the Nyquist-Shannon sampling theorem and might lead to aliasing of the input signal[71] While, in principle, CNNs are capable of implementing anti-aliasing filters, it has been observed that this does not happen in practice [82] and yield models that are not equivariant to translations. Furthermore, if a CNN makes use of fully connected layers, translation equivariance does not imply translation invariance, as the fully connected layers are not invariant to shifts of the input.[83][14] One solution for complete translation invariance is avoiding any down-sampling throughout the network and applying global average pooling at the last layer.[71] Additionally, several other partial solutions have been proposed, such as anti-aliasing before downsampling operations,[84] spatial transformer networks,[85] data augmentation, subsampling combined with pooling,[14] and capsule neural networks.[86]
+
+Evaluation
+The accuracy of the final model is based on a sub-part of the dataset set apart at the start, often called a test-set. Other times methods such as k-fold cross-validation are applied. Other strategies include using conformal prediction.[87][88]
+
+Regularization methods
+Main article: Regularization (mathematics)
+
+This section needs additional citations for verification. Please help improve this article by adding citations to reliable sources in this section. Unsourced material may be challenged and removed. (June 2017) (Learn how and when to remove this message)
+Regularization is a process of introducing additional information to solve an ill-posed problem or to prevent overfitting. CNNs use various types of regularization.
+
+Empirical
+Dropout
+Because a fully connected layer occupies most of the parameters, it is prone to overfitting. One method to reduce overfitting is dropout, introduced in 2014.[89] At each training stage, individual nodes are either "dropped out" of the net (ignored) with probability 
+1
+−
+p
+{\displaystyle 1-p} or kept with probability 
+p
+{\displaystyle p}, so that a reduced network is left; incoming and outgoing edges to a dropped-out node are also removed. Only the reduced network is trained on the data in that stage. The removed nodes are then reinserted into the network with their original weights.
+
+In the training stages, 
+p
+{\displaystyle p} is usually 0.5; for input nodes, it is typically much higher because information is directly lost when input nodes are ignored.
+
+At testing time after training has finished, we would ideally like to find a sample average of all possible 
+2
+n
+{\displaystyle 2^{n}} dropped-out networks; unfortunately this is unfeasible for large values of 
+n
+{\displaystyle n}. However, we can find an approximation by using the full network with each node's output weighted by a factor of 
+p
+{\displaystyle p}, so the expected value of the output of any node is the same as in the training stages. This is the biggest contribution of the dropout method: although it effectively generates 
+2
+n
+{\displaystyle 2^{n}} neural nets, and as such allows for model combination, at test time only a single network needs to be tested.
+
+By avoiding training all nodes on all training data, dropout decreases overfitting. The method also significantly improves training speed. This makes the model combination practical, even for deep neural networks. The technique seems to reduce node interactions, leading them to learn more robust features[clarification needed] that better generalize to new data.
+
+DropConnect
+DropConnect is the generalization of dropout in which each connection, rather than each output unit, can be dropped with probability 
+1
+−
+p
+{\displaystyle 1-p}. Each unit thus receives input from a random subset of units in the previous layer.[90]
+
+DropConnect is similar to dropout as it introduces dynamic sparsity within the model, but differs in that the sparsity is on the weights, rather than the output vectors of a layer. In other words, the fully connected layer with DropConnect becomes a sparsely connected layer in which the connections are chosen at random during the training stage.
+
+Stochastic pooling
+A major drawback to Dropout is that it does not have the same benefits for convolutional layers, where the neurons are not fully connected.
+
+Even before Dropout, in 2013 a technique called stochastic pooling,[91] the conventional deterministic pooling operations were replaced with a stochastic procedure, where the activation within each pooling region is picked randomly according to a multinomial distribution, given by the activities within the pooling region. This approach is free of hyperparameters and can be combined with other regularization approaches, such as dropout and data augmentation.
+
+An alternate view of stochastic pooling is that it is equivalent to standard max pooling but with many copies of an input image, each having small local deformations. This is similar to explicit elastic deformations of the input images,[92] which delivers excellent performance on the MNIST data set.[92] Using stochastic pooling in a multilayer model gives an exponential number of deformations since the selections in higher layers are independent of those below.
+
+Artificial data
+Main article: Data augmentation
+Because the degree of model overfitting is determined by both its power and the amount of training it receives, providing a convolutional network with more training examples can reduce overfitting. Because there is often not enough available data to train, especially considering that some part should be spared for later testing, two approaches are to either generate new data from scratch (if possible) or perturb existing data to create new ones. The latter one is used since mid-1990s.[49] For example, input images can be cropped, rotated, or rescaled to create new examples with the same labels as the original training set.[93]
+
+Explicit
+Early stopping
+Main article: Early stopping
+One of the simplest methods to prevent overfitting of a network is to simply stop the training before overfitting has had a chance to occur. It comes with the disadvantage that the learning process is halted.
+
+Number of parameters
+Another simple way to prevent overfitting is to limit the number of parameters, typically by limiting the number of hidden units in each layer or limiting network depth. For convolutional networks, the filter size also affects the number of parameters. Limiting the number of parameters restricts the predictive power of the network directly, reducing the complexity of the function that it can perform on the data, and thus limits the amount of overfitting. This is equivalent to a "zero norm".
+
+Weight decay
+A simple form of added regularizer is weight decay, which simply adds an additional error, proportional to the sum of weights (L1 norm) or squared magnitude (L2 norm) of the weight vector, to the error at each node. The level of acceptable model complexity can be reduced by increasing the proportionality constant('alpha' hyperparameter), thus increasing the penalty for large weight vectors.
+
+L2 regularization is the most common form of regularization. It can be implemented by penalizing the squared magnitude of all parameters directly in the objective. The L2 regularization has the intuitive interpretation of heavily penalizing peaky weight vectors and preferring diffuse weight vectors. Due to multiplicative interactions between weights and inputs this has the useful property of encouraging the network to use all of its inputs a little rather than some of its inputs a lot.
+
+L1 regularization is also common. It makes the weight vectors sparse during optimization. In other words, neurons with L1 regularization end up using only a sparse subset of their most important inputs and become nearly invariant to the noisy inputs. L1 with L2 regularization can be combined; this is called elastic net regularization.
+
+Max norm constraints
+Another form of regularization is to enforce an absolute upper bound on the magnitude of the weight vector for every neuron and use projected gradient descent to enforce the constraint. In practice, this corresponds to performing the parameter update as normal, and then enforcing the constraint by clamping the weight vector 
+w
+→{\displaystyle {\vec {w}}} of every neuron to satisfy 
+‖
+w
+→
+‖
+2
+<
+c
+{\displaystyle \|{\vec {w}}\|_{2}<c}. Typical values of 
+c
+{\displaystyle c} are order of 3–4. Some papers report improvements[94] when using this form of regularization.
+
+Hierarchical coordinate frames
+Pooling loses the precise spatial relationships between high-level parts (such as nose and mouth in a face image). These relationships are needed for identity recognition. Overlapping the pools so that each feature occurs in multiple pools, helps retain the information. Translation alone cannot extrapolate the understanding of geometric relationships to a radically new viewpoint, such as a different orientation or scale. On the other hand, people are very good at extrapolating; after seeing a new shape once they can recognize it from a different viewpoint.[95]
+
+An earlier common way to deal with this problem is to train the network on transformed data in different orientations, scales, lighting, etc. so that the network can cope with these variations. This is computationally intensive for large data-sets. The alternative is to use a hierarchy of coordinate frames and use a group of neurons to represent a conjunction of the shape of the feature and its pose relative to the retina. The pose relative to the retina is the relationship between the coordinate frame of the retina and the intrinsic features' coordinate frame.[96]
+
+Thus, one way to represent something is to embed the coordinate frame within it. This allows large features to be recognized by using the consistency of the poses of their parts (e.g. nose and mouth poses make a consistent prediction of the pose of the whole face). This approach ensures that the higher-level entity (e.g. face) is present when the lower-level (e.g. nose and mouth) agree on its prediction of the pose. The vectors of neuronal activity that represent pose ("pose vectors") allow spatial transformations modeled as linear operations that make it easier for the network to learn the hierarchy of visual entities and generalize across viewpoints. This is similar to the way the human visual system imposes coordinate frames in order to represent shapes.[97]
+
+Applications
+Image recognition
+CNNs are often used in image recognition systems. In 2012, an error rate of 0.23% on the MNIST database was reported.[26] Another paper on using CNN for image classification reported that the learning process was "surprisingly fast"; in the same paper, the best published results as of 2011 were achieved in the MNIST database and the NORB database.[23] Subsequently, a similar CNN called AlexNet[98] won the ImageNet Large Scale Visual Recognition Challenge 2012.
+
+When applied to facial recognition, CNNs achieved a large decrease in error rate.[99] Another paper reported a 97.6% recognition rate on "5,600 still images of more than 10 subjects".[19] CNNs were used to assess video quality in an objective way after manual training; the resulting system had a very low root mean square error.[100]
+
+The ImageNet Large Scale Visual Recognition Challenge is a benchmark in object classification and detection, with millions of images and hundreds of object classes. In the ILSVRC 2014,[101] a large-scale visual recognition challenge, almost every highly ranked team used CNN as their basic framework. The winner GoogLeNet[102] (the foundation of DeepDream) increased the mean average precision of object detection to 0.439329, and reduced classification error to 0.06656, the best result to date. Its network applied more than 30 layers. That performance of convolutional neural networks on the ImageNet tests was close to that of humans.[103] The best algorithms still struggle with objects that are small or thin, such as a small ant on a stem of a flower or a person holding a quill in their hand. They also have trouble with images that have been distorted with filters, an increasingly common phenomenon with modern digital cameras. By contrast, those kinds of images rarely trouble humans. Humans, however, tend to have trouble with other issues. For example, they are not good at classifying objects into fine-grained categories such as the particular breed of dog or species of bird, whereas convolutional neural networks handle this.[citation needed]
+
+In 2015, a many-layered CNN demonstrated the ability to spot faces from a wide range of angles, including upside down, even when partially occluded, with competitive performance. The network was trained on a database of 200,000 images that included faces at various angles and orientations and a further 20 million images without faces. They used batches of 128 images over 50,000 iterations.[104]
+
+Video analysis
+Compared to image data domains, there is relatively little work on applying CNNs to video classification. Video is more complex than images since it has another (temporal) dimension. However, some extensions of CNNs into the video domain have been explored. One approach is to treat space and time as equivalent dimensions of the input and perform convolutions in both time and space.[105][106] Another way is to fuse the features of two convolutional neural networks, one for the spatial and one for the temporal stream.[107][108][109] Long short-term memory (LSTM) recurrent units are typically incorporated after the CNN to account for inter-frame or inter-clip dependencies.[110][111] Unsupervised learning schemes for training spatio-temporal features have been introduced, based on Convolutional Gated Restricted Boltzmann Machines[112] and Independent Subspace Analysis.[113] Its application can be seen in text-to-video model.[citation needed]
+
+Natural language processing
+CNNs have also been explored for natural language processing. CNN models are effective for various NLP problems and achieved excellent results in semantic parsing,[114] search query retrieval,[115] sentence modeling,[116] classification,[117] prediction[118] and other traditional NLP tasks.[119] Compared to traditional language processing methods such as recurrent neural networks, CNNs can represent different contextual realities of language that do not rely on a series-sequence assumption, while RNNs are better suitable when classical time series modeling is required.[120][121][122][123]
+
+Anomaly detection
+A CNN with 1-D convolutions was used on time series in the frequency domain (spectral residual) by an unsupervised model to detect anomalies in the time domain.[124]
+
+Drug discovery
+CNNs have been used in drug discovery. Predicting the interaction between molecules and biological proteins can identify potential treatments. In 2015, Atomwise introduced AtomNet, the first deep learning neural network for structure-based drug design.[125] The system trains directly on 3-dimensional representations of chemical interactions. Similar to how image recognition networks learn to compose smaller, spatially proximate features into larger, complex structures,[126] AtomNet discovers chemical features, such as aromaticity, sp3 carbons, and hydrogen bonding. Subsequently, AtomNet was used to predict novel candidate biomolecules for multiple disease targets, most notably treatments for the Ebola virus[127] and multiple sclerosis.[128]
+
+Checkers game
+CNNs have been used in the game of checkers. From 1999 to 2001, Fogel and Chellapilla published papers showing how a convolutional neural network could learn to play checker using co-evolution. The learning process did not use prior human professional games, but rather focused on a minimal set of information contained in the checkerboard: the location and type of pieces, and the difference in number of pieces between the two sides. Ultimately, the program (Blondie24) was tested on 165 games against players and ranked in the highest 0.4%.[129][130] It also earned a win against the program Chinook at its "expert" level of play.[131]
+
+Go
+CNNs have been used in computer Go. In December 2014, Clark and Storkey published a paper showing that a CNN trained by supervised learning from a database of human professional games could outperform GNU Go and win some games against Monte Carlo tree search Fuego 1.1 in a fraction of the time it took Fuego to play.[132] Later it was announced that a large 12-layer convolutional neural network had correctly predicted the professional move in 55% of positions, equalling the accuracy of a 6 dan human player. When the trained convolutional network was used directly to play games of Go, without any search, it beat the traditional search program GNU Go in 97% of games, and matched the performance of the Monte Carlo tree search program Fuego simulating ten thousand playouts (about a million positions) per move.[133]
+
+A couple of CNNs for choosing moves to try ("policy network") and evaluating positions ("value network") driving MCTS were used by AlphaGo, the first to beat the best human player at the time.[134]
+
+Time series forecasting
+Recurrent neural networks are generally considered the best neural network architectures for time series forecasting (and sequence modeling in general), but recent studies show that convolutional networks can perform comparably or even better.[135][11] Dilated convolutions[136] might enable one-dimensional convolutional neural networks to effectively learn time series dependences.[137] Convolutions can be implemented more efficiently than RNN-based solutions, and they do not suffer from vanishing (or exploding) gradients.[138] Convolutional networks can provide an improved forecasting performance when there are multiple similar time series to learn from.[139] CNNs can also be applied to further tasks in time series analysis (e.g., time series classification[140] or quantile forecasting[141]).
+
+Cultural heritage and 3D-datasets
+As archaeological findings such as clay tablets with cuneiform writing are increasingly acquired using 3D scanners, benchmark datasets are becoming available, including HeiCuBeDa[142] providing almost 2000 normalized 2-D and 3-D datasets prepared with the GigaMesh Software Framework.[143] So curvature-based measures are used in conjunction with geometric neural networks (GNNs), e.g. for period classification of those clay tablets being among the oldest documents of human history.[144][145]
+
+Fine-tuning
+For many applications, training data is not very available. Convolutional neural networks usually require a large amount of training data in order to avoid overfitting. A common technique is to train the network on a larger data set from a related domain. Once the network parameters have converged an additional training step is performed using the in-domain data to fine-tune the network weights, this is known as transfer learning. Furthermore, this technique allows convolutional network architectures to successfully be applied to problems with tiny training sets.[146]
+
+Human interpretable explanations
+End-to-end training and prediction are common practice in computer vision. However, human interpretable explanations are required for critical systems such as a self-driving cars.[147] With recent advances in visual salience, spatial attention, and temporal attention, the most critical spatial regions/temporal instants could be visualized to justify the CNN predictions.[148][149]
+
+Related architectures
+Deep Q-networks
+A deep Q-network (DQN) is a type of deep learning model that combines a deep neural network with Q-learning, a form of reinforcement learning. Unlike earlier reinforcement learning agents, DQNs that utilize CNNs can learn directly from high-dimensional sensory inputs via reinforcement learning.[150]
+
+Preliminary results were presented in 2014, with an accompanying paper in February 2015.[151] The research described an application to Atari 2600 gaming. Other deep reinforcement learning models preceded it.[152]
+
+Deep belief networks
+Main article: Deep belief network
+Convolutional deep belief networks (CDBN) have structure very similar to convolutional neural networks and are trained similarly to deep belief networks. Therefore, they exploit the 2D structure of images, like CNNs do, and make use of pre-training like deep belief networks. They provide a generic structure that can be used in many image and signal processing tasks. Benchmark results on standard image datasets like CIFAR[153] have been obtained using CDBNs.[154]
+

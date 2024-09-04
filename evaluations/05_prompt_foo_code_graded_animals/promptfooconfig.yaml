@@ -1,0 +1,18 @@
+description: "Animal Legs Eval"
+
+prompts:
+  - prompts.py:simple_prompt
+  - prompts.py:better_prompt
+  - prompts.py:chain_of_thought_prompt
+  
+providers:
+  - anthropic:messages:claude-3-haiku-20240307
+  - anthropic:messages:claude-3-5-sonnet-20240620
+
+tests: animal_legs_tests.csv
+
+defaultTest:
+  options:
+    transform: file://transform.py
+
+

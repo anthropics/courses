@@ -1,0 +1,28 @@
+description: Count mentions
+prompts:
+  - >-
+    Write a short paragraph about {{topic}}. Make sure you mention {{topic}} exactly {{count}} times, no more or fewer. Only use lower case letters in your output.
+providers:
+  - anthropic:messages:claude-3-haiku-20240307
+  - anthropic:messages:claude-3-5-sonnet-20240620
+defaultTest:
+  assert:
+    - type: python
+      value: file://count.py
+tests:
+  - vars:
+      topic: sheep
+      count: 3
+  - vars:
+      topic: fowl
+      count: 2
+  - vars:
+      topic: gallows
+      count: 4
+  - vars:
+      topic: tweezers
+      count: 7
+  - vars:
+      topic: jeans
+      count: 6
+

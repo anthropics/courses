@@ -1,0 +1,70 @@
+Handwriting recognition (HWR), also known as handwritten text recognition (HTR), is the ability of a computer to receive and interpret intelligible handwritten input from sources such as paper documents, photographs, touch-screens and other devices.[1][2] The image of the written text may be sensed "off line" from a piece of paper by optical scanning (optical character recognition) or intelligent word recognition. Alternatively, the movements of the pen tip may be sensed "on line", for example by a pen-based computer screen surface, a generally easier task as there are more clues available. A handwriting recognition system handles formatting, performs correct segmentation into characters, and finds the most possible words.
+
+Offline recognition
+Offline handwriting recognition involves the automatic conversion of text in an image into letter codes that are usable within computer and text-processing applications. The data obtained by this form is regarded as a static representation of handwriting. Offline handwriting recognition is comparatively difficult, as different people have different handwriting styles. And, as of today, OCR engines are primarily focused on machine printed text and ICR for hand "printed" (written in capital letters) text.
+
+Traditional techniques
+Character extraction
+Offline character recognition often involves scanning a form or document. This means the individual characters contained in the scanned image will need to be extracted. Tools exist that are capable of performing this step.[3] However, there are several common imperfections in this step. The most common is when characters that are connected are returned as a single sub-image containing both characters. This causes a major problem in the recognition stage. Yet many algorithms are available that reduce the risk of connected characters.
+
+Character recognition
+After individual characters have been extracted, a recognition engine is used to identify the corresponding computer character. Several different recognition techniques are currently available.
+
+Feature extraction
+Feature extraction works in a similar fashion to neural network recognizers. However, programmers must manually determine the properties they feel are important. This approach gives the recognizer more control over the properties used in identification. Yet any system using this approach requires substantially more development time than a neural network because the properties are not learned automatically.
+
+Modern techniques
+Where traditional techniques focus on segmenting individual characters for recognition, modern techniques focus on recognizing all the characters in a segmented line of text. Particularly they focus on machine learning techniques that are able to learn visual features, avoiding the limiting feature engineering previously used. State-of-the-art methods use convolutional networks to extract visual features over several overlapping windows of a text line image which a recurrent neural network uses to produce character probabilities.[4]
+
+Online recognition
+Online handwriting recognition involves the automatic conversion of text as it is written on a special digitizer or PDA, where a sensor picks up the pen-tip movements as well as pen-up/pen-down switching. This kind of data is known as digital ink and can be regarded as a digital representation of handwriting. The obtained signal is converted into letter codes that are usable within computer and text-processing applications.
+
+The elements of an online handwriting recognition interface typically include:
+
+a pen or stylus for the user to write with
+a touch sensitive surface, which may be integrated with, or adjacent to, an output display.
+a software application which interprets the movements of the stylus across the writing surface, translating the resulting strokes into digital text.
+The process of online handwriting recognition can be broken down into a few general steps:
+
+preprocessing,
+feature extraction and
+classification
+The purpose of preprocessing is to discard irrelevant information in the input data, that can negatively affect the recognition.[5] This concerns speed and accuracy. Preprocessing usually consists of binarization, normalization, sampling, smoothing and denoising.[6] The second step is feature extraction. Out of the two- or higher-dimensional vector field received from the preprocessing algorithms, higher-dimensional data is extracted. The purpose of this step is to highlight important information for the recognition model. This data may include information like pen pressure, velocity or the changes of writing direction. The last big step is classification. In this step, various models are used to map the extracted features to different classes and thus identifying the characters or words the features represent.
+
+Hardware
+Commercial products incorporating handwriting recognition as a replacement for keyboard input were introduced in the early 1980s. Examples include handwriting terminals such as the Pencept Penpad[7] and the Inforite point-of-sale terminal.[8] With the advent of the large consumer market for personal computers, several commercial products were introduced to replace the keyboard and mouse on a personal computer with a single pointing/handwriting system, such as those from Pencept,[9] CIC[10] and others. The first commercially available tablet-type portable computer was the GRiDPad from GRiD Systems, released in September 1989. Its operating system was based on MS-DOS.
+
+In the early 1990s, hardware makers including NCR, IBM and EO released tablet computers running the PenPoint operating system developed by GO Corp. PenPoint used handwriting recognition and gestures throughout and provided the facilities to third-party software. IBM's tablet computer was the first to use the ThinkPad name and used IBM's handwriting recognition. This recognition system was later ported to Microsoft Windows for Pen Computing, and IBM's Pen for OS/2. None of these were commercially successful.
+
+Advancements in electronics allowed the computing power necessary for handwriting recognition to fit into a smaller form factor than tablet computers, and handwriting recognition is often used as an input method for hand-held PDAs. The first PDA to provide written input was the Apple Newton, which exposed the public to the advantage of a streamlined user interface. However, the device was not a commercial success, owing to the unreliability of the software, which tried to learn a user's writing patterns. By the time of the release of the Newton OS 2.0, wherein the handwriting recognition was greatly improved, including unique features still not found in current recognition systems such as modeless error correction, the largely negative first impression had been made. After discontinuation of Apple Newton, the feature was incorporated in Mac OS X 10.2 and later as Inkwell.
+
+Palm later launched a successful series of PDAs based on the Graffiti recognition system. Graffiti improved usability by defining a set of "unistrokes", or one-stroke forms, for each character. This narrowed the possibility for erroneous input, although memorization of the stroke patterns did increase the learning curve for the user. The Graffiti handwriting recognition was found to infringe on a patent held by Xerox, and Palm replaced Graffiti with a licensed version of the CIC handwriting recognition which, while also supporting unistroke forms, pre-dated the Xerox patent. The court finding of infringement was reversed on appeal, and then reversed again on a later appeal. The parties involved subsequently negotiated a settlement concerning this and other patents.
+
+A Tablet PC is a notebook computer with a digitizer tablet and a stylus, which allows a user to handwrite text on the unit's screen. The operating system recognizes the handwriting and converts it into text. Windows Vista and Windows 7 include personalization features that learn a user's writing patterns or vocabulary for English, Japanese, Chinese Traditional, Chinese Simplified and Korean. The features include a "personalization wizard" that prompts for samples of a user's handwriting and uses them to retrain the system for higher accuracy recognition. This system is distinct from the less advanced handwriting recognition system employed in its Windows Mobile OS for PDAs.
+
+Although handwriting recognition is an input form that the public has become accustomed to, it has not achieved widespread use in either desktop computers or laptops. It is still generally accepted that keyboard input is both faster and more reliable. As of 2006, many PDAs offer handwriting input, sometimes even accepting natural cursive handwriting, but accuracy is still a problem, and some people still find even a simple on-screen keyboard more efficient.
+
+Software
+Early software could understand print handwriting where the characters were separated; however, cursive handwriting with connected characters presented Sayre's Paradox, a difficulty involving character segmentation. In 1962 Shelia Guberman, then in Moscow, wrote the first applied pattern recognition program.[11] Commercial examples came from companies such as Communications Intelligence Corporation and IBM.
+
+In the early 1990s, two companies – ParaGraph International and Lexicus – came up with systems that could understand cursive handwriting recognition. ParaGraph was based in Russia and founded by computer scientist Stepan Pachikov while Lexicus was founded by Ronjon Nag and Chris Kortge who were students at Stanford University. The ParaGraph CalliGrapher system was deployed in the Apple Newton systems, and Lexicus Longhand system was made available commercially for the PenPoint and Windows operating system. Lexicus was acquired by Motorola in 1993 and went on to develop Chinese handwriting recognition and predictive text systems for Motorola. ParaGraph was acquired in 1997 by SGI and its handwriting recognition team formed a P&I division, later acquired from SGI by Vadem. Microsoft has acquired CalliGrapher handwriting recognition and other digital ink technologies developed by P&I from Vadem in 1999.
+
+Wolfram Mathematica (8.0 or later) also provides a handwriting or text recognition function TextRecognize.
+
+Research
+
+Method used for exploiting contextual information in the first handwritten address interpretation system developed by Sargur Srihari and Jonathan Hull[12]
+Handwriting recognition has an active community of academics studying it. The biggest conferences for handwriting recognition are the International Conference on Frontiers in Handwriting Recognition (ICFHR), held in even-numbered years, and the International Conference on Document Analysis and Recognition (ICDAR), held in odd-numbered years. Both of these conferences are endorsed by the IEEE and IAPR. In 2021, the ICDAR proceedings will be published by LNCS, Springer.
+
+Active areas of research include:
+
+Online recognition
+Offline recognition
+Signature verification
+Postal address interpretation
+Bank-Check processing
+Writer recognition
+Results since 2009
+Since 2009, the recurrent neural networks and deep feedforward neural networks developed in the research group of Jürgen Schmidhuber at the Swiss AI Lab IDSIA have won several international handwriting competitions.[13] In particular, the bi-directional and multi-dimensional Long short-term memory (LSTM)[14][15] of Alex Graves et al. won three competitions in connected handwriting recognition at the 2009 International Conference on Document Analysis and Recognition (ICDAR), without any prior knowledge about the three different languages (French, Arabic, Persian) to be learned. Recent GPU-based deep learning methods for feedforward networks by Dan Ciresan and colleagues at IDSIA won the ICDAR 2011 offline Chinese handwriting recognition contest; their neural networks also were the first artificial pattern recognizers to achieve human-competitive performance[16] on the famous MNIST handwritten digits problem[17] of Yann LeCun and colleagues at NYU.
+
+Benjamin Graham of the University of Warwick won a 2013 Chinese handwriting recognition contest, with only a 2.61% error rate, by using an approach to convolutional neural networks that evolved (by 2017) into "sparse convolutional neural networks".[18][19]

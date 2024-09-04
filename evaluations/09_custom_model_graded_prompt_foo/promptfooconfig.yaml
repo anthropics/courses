@@ -1,0 +1,33 @@
+description: 'Summarization Evaluation'
+
+prompts:
+  - prompts.py:basic_summarize
+  - prompts.py:better_summarize
+  - prompts.py:best_summarize
+
+providers:
+  - id: anthropic:messages:claude-3-5-sonnet-20240620
+    label: "3.5 Sonnet"
+
+tests:
+  - vars:
+      article: file://articles/article1.txt
+  - vars:
+      article: file://articles/article2.txt
+  - vars:
+      article: file://articles/article3.txt
+  - vars:
+      article: file://articles/article4.txt
+  - vars:
+      article: file://articles/article5.txt
+  - vars:
+      article: file://articles/article6.txt
+  - vars:
+      article: file://articles/article7.txt
+  - vars:
+      article: file://articles/article8.txt
+
+defaultTest:
+  assert:
+    - type: python
+      value: file://custom_llm_eval.py
