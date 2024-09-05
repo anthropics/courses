@@ -1,6 +1,6 @@
 # Prompt evaluations
 
-Welcome to Anthropic's comprehensive prompt evaluations course. Across nine lessons, you will learn everything you need to know to implement evaluations successfully in your workflows with the Anthropic API. We recommend that you start from the beginning with the [Evaluations 101](./01_intro_to_evals.ipynb) lesson, as each lesson builds on key concepts taught in previous ones.
+Welcome to Anthropic's comprehensive prompt evaluations course. Across nine lessons, you will learn everything you need to know to implement evaluations successfully in your workflows with the Anthropic API. We recommend that you start from the beginning with the [Evaluations 101](./01_intro_to_evals/01_intro_to_evals.ipynb) lesson, as each lesson builds on key concepts taught in previous ones.
 
 ## Table of contents
 1. [Evaluations 101](./01_intro_to_evals/01_intro_to_evals.ipynb)
