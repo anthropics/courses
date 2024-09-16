@@ -1,0 +1,13 @@
+animal_statement,__expected
+"The animal is a human.","2"
+"The animal is a snake.","0"
+"The fox lost a leg, but then magically grew back the leg he lost and a mysterious extra leg on top of that.","5"
+"The animal is a dog.","4"
+"The animal is a cat with two extra legs.","6"
+"The animal is an elephant.","4"
+"The animal is a bird.","2"
+"The animal is a fish.","0"
+"The animal is a spider with two extra legs","10"
+"The animal is an octopus.","8"
+"The animal is an octopus that lost two legs and then regrew three legs.","9"
+"The animal is a two-headed, eight-legged mythical creature.","8"

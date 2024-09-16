@@ -1,4 +1,4 @@
-# Real world prompting course
+# Real world prompting
 
 Welcome to Anthropic's comprehensive real world prompting tutorial. This course is designed for experienced developers who have already dipped their toes into the world of prompt engineering, particularly those who have completed our comprehensive **[Prompt engineering interactive tutorial](../prompt_engineering_interactive_tutorial/README.md)**. If you haven't gone through that tutorial yet, we strongly recommend you do so before continuing, as it provides an in-depth exploration of various prompting techniques with hands-on exercises.
 

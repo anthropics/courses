@@ -1,4 +1,4 @@
-# Tool use tutorial
+# Tool use
 
 Welcome to Anthropic's comprehensive tool use tutorial. Across six lessons, you will learn everything you need to know to implement tool use successfully in your workflows with Claude. We recommend that you start from the beginning with the [tool use overview](./01_tool_use_overview.ipynb), as each lesson builds on key concepts taught in previous ones.
 

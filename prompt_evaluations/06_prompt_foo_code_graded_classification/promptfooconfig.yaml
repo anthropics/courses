@@ -1,0 +1,11 @@
+description: "Complaint Classification Eval"
+
+prompts:
+  - prompts.py:basic_prompt
+  - prompts.py:improved_prompt
+  
+providers:
+  - "anthropic:messages:claude-3-haiku-20240307"
+
+tests: dataset.csv
+
