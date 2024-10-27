@@ -15,7 +15,9 @@ RUN apt-get update && \
 # デフォルトユーザー（computeruse）の.bashrcに日本語設定を追加
 USER computeruse
 RUN echo "export LANG=ja_JP.UTF-8" >> ~/.bashrc && \
-    git config --global --add safe.directory /home/computeruse/courses
+    git config --global --add safe.directory /home/computeruse/courses && \
+    git config --global user.email "khayashi4337@gmail.com" && \
+    git config --global user.name "Kuniyuki.hayashi"    
 
 # システム全体のロケール設定
 ENV LANG=ja_JP.UTF-8 \
