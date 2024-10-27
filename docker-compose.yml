@@ -1,0 +1,23 @@
+version: '3'
+services:
+  anthropic:
+    build:
+      context: .
+      dockerfile: Dockerfile  
+    # image: ghcr.io/anthropics/anthropic-quickstarts:computer-use-demo-latest
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - GIT_USER_NAME=${GIT_USER_NAME}
+      - GIT_USER_EMAIL=${GIT_USER_EMAIL}
+    volumes:
+      - ${HOME}/.anthropic:/home/computeruse/.anthropic
+      - /c/Users/kh/prj/courses:/home/computeruse/courses
+      - /c/Users/kh/.ssh:/home/computeruse/.ssh:ro
+
+    ports:
+      - "5900:5900"
+      - "8501:8501"
+      - "6080:6080"
+      - "8080:8080"
+    tty: true
+    stdin_open: true
