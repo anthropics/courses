@@ -16,4 +16,4 @@ app.get('/', (req, res) => {
 
 app.listen(port, () => {
   console.log(`Claude Courses server running on port ${port}`);
-}); 
+});

@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'courses/**'
+      - '**'
   workflow_dispatch:
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
         run: npm install -g @railway/cli
 
       - name: Deploy to Railway
-        working-directory: .
+        working-directory: ./courses
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
