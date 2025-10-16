@@ -6,8 +6,8 @@ prompts:
   - prompts.py:best_summarize
 
 providers:
-  - id: anthropic:messages:claude-3-5-sonnet-20240620
-    label: "3.5 Sonnet"
+  - id: anthropic:messages:claude-sonnet-4-5-20250929
+    label: "Sonnet 4.5"
 
 tests:
   - vars:
