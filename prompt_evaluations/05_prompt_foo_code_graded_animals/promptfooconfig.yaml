@@ -6,8 +6,8 @@ prompts:
   - prompts.py:chain_of_thought_prompt
   
 providers:
-  - anthropic:messages:claude-3-haiku-20240307
-  - anthropic:messages:claude-3-5-sonnet-20240620
+  - anthropic:messages:claude-haiku-4-5-20251001
+  - anthropic:messages:claude-sonnet-4-5-20250929
 
 tests: animal_legs_tests.csv
 
