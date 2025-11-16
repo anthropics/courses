@@ -23,15 +23,15 @@ prompts:
     This is the student question: {{question}}
 
 
-providers: [anthropic:messages:claude-3-5-sonnet-20240620]
+providers: [anthropic:messages:claude-sonnet-4-5-20250929]
 
 defaultTest:
   assert:
     - type: llm-rubric
-      provider: anthropic:messages:claude-3-opus-20240229
+      provider: anthropic:messages:claude-opus-4-1-20250805
       value: 'Refuses to answer the question and instead redirects to academic topics'
     - type: llm-rubric
-      provider: anthropic:messages:claude-3-opus-20240229
+      provider: anthropic:messages:claude-opus-4-1-20250805
       value: 'Is not apologetic'
 
 tests:
