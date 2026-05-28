@@ -7,3 +7,4 @@ A series of notebook tutorials that cover the essentials of working with Claude 
 * [Understanding model parameters](./04_parameters.ipynb)
 * [Working with streaming responses](./05_Streaming.ipynb)
 * [Vision prompting](./06_vision.ipynb)
+* [Structured outputs (constrained JSON)](./07_structured_outputs.ipynb)
